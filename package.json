@@ -1,0 +1,31 @@
+{
+  "name": "oxidizer-ts",
+  "version": "1.0.0",
+  "description": "Oxidizer Version 2 (TypeScript)",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelmunson/oxidizer-ts.git"
+  },
+  "keywords": [
+    "oxidizer",
+    "react",
+    "webdev",
+    "framework"
+  ],
+  "author": "Michael Munson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michaelmunson/oxidizer-ts/issues"
+  },
+  "homepage": "https://github.com/michaelmunson/oxidizer-ts#readme",
+  "dependencies": {
+    "csstype": "^3.1.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
