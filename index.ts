@@ -1,4 +1,4 @@
-import {Elements} from "./src/elements";
+import {Intrinsics} from "./src/elements";
 // import {Component as OxidizerComponent} from "./src/component";
 
 export const {
@@ -105,7 +105,7 @@ export const {
     VIDEO,
     VAR,
     WBR  
-} = Elements.Intrinsics;
+} = Intrinsics.Elements;
 
 namespace Oxidizer {
     export function root(element:HTMLElement){
