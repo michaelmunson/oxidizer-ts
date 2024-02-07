@@ -70,9 +70,9 @@ export namespace Intrinsics {
 
     export function create<T extends HTMLElement=HTMLElement, Props=undefined>(
         tagName:keyof HTMLElementTagNameMap, 
-        fields?:Fields<T,Props>|SubTree<Props>, 
-        subtree?:SubTree<Props>)
-    {
+        fields:Fields<T,Props>|SubTree<Props>|undefined, 
+        subtree:SubTree<Props>|undefined
+    ){
         function createAssignment(rawElement:T, props:Props){
             const assignment:any = {
                 render(props?:object) {
@@ -103,7 +103,11 @@ export namespace Intrinsics {
                         (element.style as any)[property] = value[property]; 
                     }
                 } else if (field !== 'props'){
-                    element[field] = value;
+                    try {
+                        element[field] = value;
+                    } catch (e){
+                        console.warn(e);
+                    }
                 }
             }
 

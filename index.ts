@@ -1,5 +1,5 @@
 import {Intrinsics} from "./src/elements";
-// import {Component as OxidizerComponent} from "./src/component";
+import {Component as OxidizerComponent} from "./src/component";
 
 export const {
     A,
@@ -120,9 +120,7 @@ namespace Oxidizer {
             }
         })
     }
-    export class Component {
-
-    }
+    export import Component = OxidizerComponent;
     // export import Component = OxidizerComponent;
 }
 
