@@ -1,5 +1,6 @@
-import {Intrinsics} from "./src/elements";
-import {Component as OxidizerComponent} from "./src/component";
+import { Intrinsics } from "./src/elements";
+import { Component as OxidizerComponent} from "./src/component";
+// import {Component as OxidizerComponent} from "./src/component";
 
 export const {
     A,
@@ -104,23 +105,30 @@ export const {
     UL,
     VIDEO,
     VAR,
-    WBR  
+    WBR
 } = Intrinsics.Elements;
 
 namespace Oxidizer {
-    export function root(element:HTMLElement){
+    export type Intrinsic<T extends HTMLElement=HTMLElement, Props=undefined> = Intrinsics.Intrinsic<T,Props>;
+    export type HTML<Props=undefined> = Intrinsic<HTMLElement,Props>
+    export import Component = OxidizerComponent;
+    export function root(element: HTMLElement) {
         return Object.assign(element, {
-            render(toRender:HTMLElement|HTMLElement[]){
+            render(toRender:Intrinsics.SubTree<undefined>) {
                 element.innerHTML = "";
-                if (Array.isArray(toRender)){
-                    element.append(...toRender);
-                } else {
+                if (Array.isArray(toRender)) {
+                    this.render(toRender);
+                }
+                else if (toRender instanceof Component){
+                    this.render((toRender as any).render());
+                } 
+                else {
                     element.append(toRender);
                 }
             }
         })
     }
-    export import Component = OxidizerComponent;
+    
     // export import Component = OxidizerComponent;
 }
 

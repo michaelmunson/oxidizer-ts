@@ -15,9 +15,10 @@ const buildElements = () => {
         const htmlObject = elements[name];
         const template = `
             ${name}<Props=undefined>(
-                fields?:Fields<${htmlObject}, Props>, 
+                fields?:Fields<${htmlObject}, Props>|SubTree<Props>|TemplateStringsArray, 
                 subtree?:SubTree<Props>
-            ) : Element<${htmlObject}, Props> {
+            ) : Intrinsic<${htmlObject}, Props> {
+                
                 return create<${htmlObject},Props>('${name.toLowerCase()}', fields, subtree);
             },`;
         outTextArray.push(template);

@@ -1,6 +1,8 @@
 import { CSSProperties, Check } from "../types";
 import { camelToDashed, dashedToCamel } from "./general";
 
+
+
 export namespace CSSUtils {
     export function parseObject(styles:CSSProperties){
         let styleString = "";
@@ -24,5 +26,11 @@ export namespace CSSUtils {
             styleObject[parsedProperty] = value; 
         }
         return styleObject; 
+    }
+}
+
+export class OxidizerStyleSheet {
+    constructor(){
+
     }
 }
