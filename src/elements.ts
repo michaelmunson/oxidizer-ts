@@ -1,8 +1,7 @@
-import { RenderFunction } from "./engine";
-import { Optional, CSSProperties, AnyObject } from "./types";
-import { CSSUtils } from "./utils/css";
-import { OxidizerRenderMap } from "./engine";
 import { Component } from "./component";
+import { OxidizerRenderMap, RenderFunction } from "./engine";
+import { AnyObject, CSSProperties, Optional } from "./types";
+import { OxidizerCSS } from "./utils/css";
 
 export namespace Intrinsics {
     function isHTML(x:any) : x is HTML {
@@ -100,7 +99,7 @@ export namespace Intrinsics {
                 let value:any = fields[field];
                 if (field === "style"){
                     if (typeof value === "string"){
-                        value = CSSUtils.parseString(value);
+                        value = OxidizerCSS.parseString(value);
                     }
                     for (const property in value){
                         (element.style as any)[property] = value[property]; 
