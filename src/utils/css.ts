@@ -1,5 +1,5 @@
 import { AnyObject, CSSObject, CSSProperties } from "../types";
-import { camelToDashed, dashedToCamel } from "./general";
+import { camelToDashed, dashedToCamel, generateRandomId } from "./general";
 
 
 export namespace OxidizerCSS {
@@ -58,20 +58,37 @@ export namespace OxidizerCSS {
         })
         return flattened
     }
-    
-    export class StyleSheet extends Map<string, CSSObject> {
-        private cssStyleSheet:CSSStyleSheet
 
-        constructor(styles: StyleSheetObject, options?:CSSStyleSheetInit) {
+    const styleSheets = new Map<StyleSheet,CSSStyleSheet>();
+
+    Object.assign(window, {styleSheets});
+
+    export class StyleSheet extends Map<string, CSSObject> {
+        id:string
+        options:CSSStyleSheetInit
+        styleElement?:HTMLStyleElement
+        constructor(styles: StyleSheetObject|string, options?:CSSStyleSheetInit) {
             super();
-            this.init(styles)
-            this.cssStyleSheet = this.toStyleSheet(options);
+            this.options = options ?? {};
+            this.id = 'oxss-'+generateRandomId(32, [...styleSheets.keys()].map(ss => ss.id));
+            this.init(styles, options);
         }
 
-        private init(styles: StyleSheetObject) {
-            const compiled = OxidizerCSS.compile(styles);
-            for (const key in compiled) {
-                this.set(key, compiled[key]);
+        get cssStyleSheet(){
+            return styleSheets.get(this);
+        }
+
+        private init(styles: StyleSheetObject|string, options?:CSSStyleSheetInit) {
+            if (typeof styles === "string"){
+                const cssStyleSheet = new CSSStyleSheet(options);
+                cssStyleSheet.replaceSync(styles);
+                styleSheets.set(this, cssStyleSheet)
+            } else {
+                const compiled = OxidizerCSS.compile(styles);
+                for (const key in compiled) {
+                    super.set(key, compiled[key]);
+                }
+                styleSheets.set(this, this.toStyleSheet(options));
             }
         }
     
@@ -80,7 +97,33 @@ export namespace OxidizerCSS {
             stylesheet.replaceSync(this.toString());
             return stylesheet;
         }
-    
+
+        private updateCSSStyleSheet(){
+            this.cssStyleSheet?.replaceSync(this.toString())
+            if (this.styleElement)
+                this.render();
+        }
+
+        delete(key: string): boolean {
+            const bool = super.delete(key);
+            this.updateCSSStyleSheet();
+            return bool;
+        }
+
+        set(key:string, value:CSSObject){
+            super.set(key, value);
+            this.updateCSSStyleSheet();
+            return this;
+        }
+
+        add(styles:StyleSheetObject){
+            const compiled = OxidizerCSS.compile(styles);
+            for (const key in compiled) {
+                this.set(key, compiled[key]);
+            }
+            return this;
+        }
+
         toString(){
             const rules = []; 
             for (const [selector, styles] of this){
@@ -89,12 +132,32 @@ export namespace OxidizerCSS {
             return rules.join("\n");
         }
     
-        render(){
-    
+        toElement(){
+            const styleSheetElement = document.createElement('style');
+            styleSheetElement.innerHTML = this.toString();
+            styleSheetElement.id = this.id;
+            return styleSheetElement;  
+        }
+
+        adopt(node?:Document|ShadowRoot){
+            node = node ?? document;
+            if (this.cssStyleSheet)
+                node.adoptedStyleSheets.push(this.cssStyleSheet);
+            return this;
+        }
+
+        render(position:"append"|"prepend"="append"){
+            const element = this.toElement();
+            if (this.styleElement)
+                this.styleElement.replaceWith(element);
+            else if (position === "prepend")
+                document.head.prepend(element);
+            else
+                document.head.append(element);
+            this.styleElement = element;
+            return this;
         }
     }
 }
-
-
 
 export module OxidizerStyleSheet {}

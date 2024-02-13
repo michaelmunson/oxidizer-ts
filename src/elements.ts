@@ -626,10 +626,10 @@ export namespace Intrinsics {
             return create<HTMLSpanElement,Props>('span', fields, subtree);
         },
         STYLE<Props=undefined>(
-            fields?:Fields<HTMLStyleElement, Props>|SubTree<Props>, 
-            subtree?:SubTree<Props>
+            styles?:OxidizerCSS.StyleSheetObject
         ) : Intrinsic<HTMLStyleElement, Props> {
-            return create<HTMLStyleElement,Props>('style', fields, subtree);
+            const styleSheet = new OxidizerCSS.StyleSheet(styles ?? {});
+            return styleSheet.toElement() as any
         },
         SUB<Props=undefined>(
             fields?:Fields<HTMLElement, Props>|SubTree<Props>, 

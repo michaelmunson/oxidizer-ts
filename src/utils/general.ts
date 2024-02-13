@@ -32,3 +32,19 @@ export function getMethods(obj:any) : string[] {
     } while ((currentObj = Object.getPrototypeOf(currentObj)))
     return [...properties.keys()].filter((item:any) => typeof obj[item] === 'function' && !(ignore.includes(item))) as string[]
 }
+
+export function generateRandomId(length: number, inUse?:string[]): string {
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let randomId = '';
+  
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomId += characters.charAt(randomIndex);
+    }
+  
+    if (inUse)
+        return inUse.includes(randomId) ? generateRandomId(length) : randomId;
+    else
+        return randomId;
+}
+  
