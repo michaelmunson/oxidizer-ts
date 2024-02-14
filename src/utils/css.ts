@@ -58,6 +58,14 @@ export namespace OxidizerCSS {
         })
         return flattened
     }
+    export function stringify(styles: StyleSheetObject): string {
+        const compiled = compile(styles); 
+        const rules = [];
+        for (const selector in compiled){
+            rules.push(`${selector} {\n  ${Object.entries(compiled[selector]).map(([key,val]) => `${camelToDashed(key)}:${val};`).join("\n  ")}\n}`)
+        }
+        return rules.join('\n'); 
+    }
 
     const styleSheets = new Map<StyleSheet,CSSStyleSheet>();
 
