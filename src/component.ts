@@ -3,13 +3,6 @@ import { Intrinsics } from "./elements"
 import { Optional } from "./types";
 import { camelToDashed, getMethods } from "./utils/general";
 
-// export namespace Component {
-
-// }
-
-// export function createComponent(name, methods) : {
-
-// }
 
 export abstract class Component<Props=any> {
     fields:Intrinsics.Fields<HTMLElement,Props>
