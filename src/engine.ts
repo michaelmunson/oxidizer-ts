@@ -1,4 +1,4 @@
-import { Intrinsics } from "./elements";
+import { Intrinsics } from "./intrinsics";
 
 type DOMElement = Intrinsics.Intrinsic | Node;
 

@@ -1,5 +1,5 @@
-import * as data from "./data";
 import fs from "fs";
+import * as data from "./data";
 
 const outDir = '.out'
 
@@ -15,11 +15,11 @@ const buildElements = () => {
         const htmlObject = elements[name];
         const template = `
             ${name}<Props=undefined>(
-                fields?:Fields<${htmlObject}, Props>|SubTree<Props>|TemplateStringsArray, 
-                subtree?:SubTree<Props>
+                fields?:Fields<${htmlObject}, Props>|Children<Props>|TemplateStringsArray, 
+                children?:Children<Props>
             ) : Intrinsic<${htmlObject}, Props> {
                 
-                return create<${htmlObject},Props>('${name.toLowerCase()}', fields, subtree);
+                return create<${htmlObject},Props>('${name.toLowerCase()}', fields, children);
             },`;
         outTextArray.push(template);
     }

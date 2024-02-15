@@ -147,3 +147,23 @@ root.render(
 );
 
 ```
+
+## CSS
+```typescript
+import Oxidizer from "oxidizer-ts";
+
+const stylesheet = new Oxidizer.StyleSheet({
+  'body' : {
+    background: 'black',
+    '#app' : {
+      background: 'green',
+      'p' : {
+        color:'red',
+      }
+    }
+  }
+});
+
+stylesheet.adopt();
+```
+

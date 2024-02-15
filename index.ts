@@ -1,5 +1,5 @@
-import { Component as OxidizerComponent } from "./src/component";
-import { Intrinsics } from "./src/elements";
+import { Component as OxidizerComponent, createElement as OxidizerCreateElement } from "./src/component";
+import { Intrinsics } from "./src/intrinsics";
 import { OxidizerCSS } from "./src/utils/css";
 
 export const {
@@ -113,9 +113,10 @@ namespace Oxidizer {
     export type HTML<Props=undefined> = Intrinsic<HTMLElement,Props>
     export import Component = OxidizerComponent;
     export import StyleSheet = OxidizerCSS.StyleSheet;
+    export const createElement = OxidizerCreateElement;
     export function root(element: HTMLElement) {
         return Object.assign(element, {
-            render(toRender:Intrinsics.SubTree<undefined>) {
+            render(toRender:Intrinsics.Children<undefined>) {
                 element.innerHTML = "";
                 if (Array.isArray(toRender)) {
                     this.render(toRender);
