@@ -9,7 +9,7 @@ export namespace Intrinsics {
             || x instanceof HTMLElement
     }
     export function isFields(x:any) : x is Fields {
-        return true;
+        return !!x && !isChildren(x);
     }
     export function isElement(x:any) : x is Intrinsic {
         return x instanceof HTMLElement
@@ -42,6 +42,7 @@ export namespace Intrinsics {
 
     export type IntrinsicAssignment<T extends HTMLElement, Props>    
         = (Props extends undefined ? {} : {props:Props})
+        & {rerender(children:Children<Props>):void}
 
     export type Intrinsic<T extends HTMLElement=HTMLElement, Props=undefined>
         = T & IntrinsicAssignment<T,Props> 
@@ -51,7 +52,6 @@ export namespace Intrinsics {
         | Intrinsic
         | (Props extends AnyObject ? ((props:Props) => HTML|Intrinsic|Intrinsic[]|Component|Component[]) : HTML)
         | Children<Props>[]
-        | Component<any>
 
     export namespace IntrinsicProps {
         export function create<T extends HTMLElement=HTMLElement, Props extends object=object>(
@@ -74,8 +74,24 @@ export namespace Intrinsics {
         fields:Fields<T,Props>|Children<Props>|undefined, 
         children:Children<Props>|undefined
     ){
+        const _fields:Fields<T,Props> = isFields(fields) 
+                                        ? fields
+                                        : {} as any;
+        const _children:Children<Props> = isChildren(children)
+                                        ? children
+                                        : isChildren(fields)
+                                            ? fields
+                                            : [];
+
+        const _element = createElement(_fields);
+
         function createAssignment(rawElement:T, props:Props){
-            const assignment:any = {}
+            const assignment:any = {
+                rerender(children:Children<Props>){
+                    this.innerHTML = '';
+                    handleChildren(_element, children)
+                }
+            }
             if (props){
                 assignment.props = IntrinsicProps.create<T,typeof props>(rawElement, props); 
             }
@@ -112,33 +128,27 @@ export namespace Intrinsics {
                 children.forEach(el => handleChildren(element, el));
             }
             else if (typeof children === "function"){
-                let result = children.call(element,(element as any).props ?? {});
+                let result = children.call(
+                    element, 
+                    (element as any).props ?? undefined
+                );
                 if (typeof result === "string"){
                     result = document.createTextNode(result);
                 }
                 OxidizerRenderMap.append(element, result as Intrinsic, children as any);
                 handleChildren(element, result);
-            } 
+            }
             else if (children instanceof Component) {
                 if (children.render){
-                                    const result = children.render();
-                handleChildren(element, result as Children<Props>);
+                    const result = children.render();
+                    handleChildren(element, result as Children<Props>);
                 }
             }
             else {
                 element.append(children);
             }
         }
-        const _fields:Fields<T,Props> = isFields(fields) 
-                                        ? fields
-                                        : {} as any;
-        const _children:Children<Props> = isChildren(children)
-                                        ? children
-                                        : isChildren(fields)
-                                            ? fields
-                                            : [];
-        const _element = createElement(_fields);
-
+    
         handleChildren(_element, _children);
 
         return _element;

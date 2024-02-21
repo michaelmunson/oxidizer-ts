@@ -25,7 +25,6 @@ root.append(
     App()
 );
 ```
-
 ## Props & State
 ```typescript
 import { DIV, H1, P } from "oxidizer-ts";
@@ -91,61 +90,79 @@ document.body.prepend(
 );
 ```
 
-## Components 
-*CounterApp.ts*
-```typescript
-import Oxidizer, { BUTTON, DIV, P } from "../../oxidizer-ts";
+## Web Components
+We can leverage the `Oxidizer.createElement` method and `Oxidizer.Component` class to create easily accessible web components.
 
-interface CounterProps {
-	count: number
+*counterApp.ts*
+```typescript
+import Oxidizer, {H1, P, BUTTON} from "oxidizer-ts";
+
+interface CounterAppProps {
+  count: number
 }
 
-export class CounterApp extends Oxidizer.Component<CounterProps> {
-	render() {
-		return ((props) => [
-				P(`Count: ${props.count}`),
-				DIV({ style: { display: "flex" } }, [
-					BUTTON(
-						{ onclick() { props.count++ } },
-						"Increment"
-					),
-					BUTTON(
-						{ onclick() { props.count-- } },
-						"Decrement"
-					),
-				])
-		])
-	}
+export const CounterApp = Oxidizer.createElement(
+  'counter-app',
+  class extends Oxidizer.Component<CounterAppProps> {
+    connectedCallback(){
+      console.log(this.innerHTML)
+    }
 
-	connectedCallback(this: HTMLElement): void {
-		console.log(`${this.tagName} Connected`)
-	}
-}
-```
-*index.ts*
-```typescript
-import {CounterApp} from "./Counter"
-/* 
-cannot render app directly,
-it needs to be nested within an intrinsic
-*/
-document.body.prepend(
-  DIV({id:'app'}, [
-    new CounterApp({props: {count: 0}})
-  ])
+    render(){
+      const {props} = this;
+      return [
+        H1('Counter App'),
+        () => P(`Count: ${props.count}`),
+        BUTTON({
+          onclick: () => props.count++
+        },"Increment")
+      ]
+    }
+  }
 )
 ```
-Components can be rendered directly by first creating a "Root"
+*app.ts*
 ```typescript
-import Oxidizer from "oxidizer-ts"
-import {CounterApp} from "./Counter"
+import {CounterApp} from 'counterApp';
 
-const root = Oxidizer.root(document.body); 
+const app = CounterApp({
+    props: {count:0}
+});
 
-root.render(
-  new CounterApp({props: {count: 0}})
-);
+document.body.append(app);
+```
+### Passing Children
+We can pass children to a component using the `Children` field.
+*simpleArticle.ts*
+```typescript
+import Oxidizer, {H1} from "oxidizer-ts";
 
+export const SimpleArticle = Oxidizer.createElement(
+  'simple-article',
+  class extends Oxidizer.Component {
+    render(){
+      return [
+        H1('Simple Article'),
+        this.Children
+      ]
+    }
+  }  
+)
+```
+*app.ts*
+```typescript
+import {P} from "oxidizer-ts";
+import {SimpleArticle} from "simpleArticle"; 
+
+const simpleArticle = SimpleArticle([
+    P('This is an article!')
+])
+
+document.body.append(simpleArticle);
+
+console.log(
+    document.querySelector('simple-article')
+) // [HTMLElement]
 ```
 
 ## CSS
@@ -167,3 +184,22 @@ const stylesheet = new Oxidizer.StyleSheet({
 stylesheet.adopt();
 ```
 
+## Examples
+```typescript
+import {DIV, P, B} from 'oxidizer-ts'
+
+const app = (
+  DIV({props:{loading:true}}, (props) => {
+    const {loading} = props;
+
+    if (loading) {
+      setTimeout(() => props.loading = false, 2000);
+      return P(`Loading...`)
+    }
+
+    else return B(`Data!`)
+  })
+);
+
+document.body.append(app);
+```

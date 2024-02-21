@@ -123,7 +123,7 @@ namespace Oxidizer {
                 }
                 else if (toRender instanceof Component){
                     this.render((toRender as any).render());
-                } 
+                }
                 else {
                     element.append(toRender);
                 }
