@@ -1,6 +1,6 @@
 {
   "name": "oxidizer",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A lightweight reactive web development library based on web components.",
   "main": "index.ts",
   "scripts": {
