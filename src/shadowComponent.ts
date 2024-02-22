@@ -5,7 +5,8 @@ export class ShadowComponent<T=undefined> extends HTMLElement {
     props:T = (undefined as any)
     Children:Intrinsics.Children<any>=[]
     static observedAttributes?:string[]
-    readonly css?:OxidizerCSS.StyleSheetArgument
+    css?:OxidizerCSS.StyleSheetArgument;
+    styles?():OxidizerCSS.StyleSheetArgument
     render?():Intrinsics.Children<any>
     connectedCallback?() : void
     disconnectedCallback?() : void
@@ -14,7 +15,6 @@ export class ShadowComponent<T=undefined> extends HTMLElement {
 }
 
 function handleCSS(element:any, css:OxidizerCSS.StyleSheetArgument){
-
     let styleSheet:OxidizerCSS.StyleSheet; 
     if (typeof css === 'function'){
         Object.assign(element, {get __oxssrfn__(){return css}});
