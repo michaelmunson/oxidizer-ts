@@ -1,4 +1,5 @@
 import { Component as OxidizerComponent, createElement as OxidizerCreateElement } from "./src/component";
+import { ShadowComponent as OxidizerShadowComponent, createShadowElement as OxidizerCreateShadowElement} from "./src/shadowComponent"
 import { Intrinsics } from "./src/intrinsics";
 import { OxidizerCSS } from "./src/utils/css";
 
@@ -112,8 +113,10 @@ namespace Oxidizer {
     export type Intrinsic<T extends HTMLElement=HTMLElement, Props=undefined> = Intrinsics.Intrinsic<T,Props>;
     export type HTML<Props=undefined> = Intrinsic<HTMLElement,Props>
     export import Component = OxidizerComponent;
+    export import ShadowComponent = OxidizerShadowComponent;
     export import StyleSheet = OxidizerCSS.StyleSheet;
     export const createElement = OxidizerCreateElement;
+    export const createShadowElement = OxidizerCreateShadowElement;
     export function root(element: HTMLElement) {
         return Object.assign(element, {
             render(toRender:Intrinsics.Children<undefined>) {

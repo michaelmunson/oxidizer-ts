@@ -69,6 +69,34 @@ export namespace Intrinsics {
         }
     }
 
+    export function renderChildren<T extends HTMLElement=HTMLElement, Props=undefined>(element:Intrinsic<T,Props>, children:Children<Props>){
+        if (Array.isArray(children)){
+            children.forEach(el => renderChildren(element, el));
+        }
+        else if (typeof children === "function"){
+            let result = children.call(
+                element, 
+                (element as any).props ?? undefined
+            );
+            if (typeof result === "string"){
+                result = document.createTextNode(result);
+            }
+            OxidizerRenderMap.append(element, result as Intrinsic, children as any);
+            renderChildren(element, result);
+        }
+        else if (children instanceof Component) {
+            if (children.render){
+                const result = children.render();
+                renderChildren(element, result as Children<Props>);
+            }
+        }
+        else {
+            element.append(children);
+        }
+
+        return [...element.children]; 
+    }
+
     export function create<T extends HTMLElement=HTMLElement, Props=undefined>(
         tagName:keyof HTMLElementTagNameMap, 
         fields:Fields<T,Props>|Children<Props>|undefined, 

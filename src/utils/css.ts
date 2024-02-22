@@ -2,10 +2,15 @@ import { AnyObject, CSSObject, CSSProperties } from "../types";
 import { camelToDashed, dashedToCamel, generateRandomId } from "./general";
 
 
+
 export namespace OxidizerCSS {
     export type StyleSheetObject = {
-        [key: string]: CSSObject | StyleSheetObject
-    }
+        [key:string]: CSSObject | StyleSheetObject;
+    } | {
+        [key in keyof HTMLElementTagNameMap]: CSSObject|StyleSheetObject
+    };
+    export type StyleSheetArgument = StyleSheetObject
+                                    | (() => StyleSheetObject)
     export type CompiledStyleSheet = {
         [key: string]: CSSObject
     }
@@ -75,6 +80,7 @@ export namespace OxidizerCSS {
         id:string
         options:CSSStyleSheetInit
         styleElement?:HTMLStyleElement
+        adoptedParent?:Document|ShadowRoot
         constructor(styles: StyleSheetObject|string, options?:CSSStyleSheetInit) {
             super();
             this.options = options ?? {};
@@ -83,7 +89,7 @@ export namespace OxidizerCSS {
         }
 
         get cssStyleSheet(){
-            return styleSheets.get(this);
+            return styleSheets.get(this) as CSSStyleSheet;
         }
 
         private init(styles: StyleSheetObject|string, options?:CSSStyleSheetInit) {
@@ -112,10 +118,15 @@ export namespace OxidizerCSS {
                 this.render();
         }
 
-        delete(key: string): boolean {
-            const bool = super.delete(key);
-            this.updateCSSStyleSheet();
-            return bool;
+        destroy(){
+            if (this.adoptedParent) {
+                this.adoptedParent.adoptedStyleSheets.forEach((ss, index) => {
+                    if (ss === this.cssStyleSheet){
+                        this.adoptedParent?.adoptedStyleSheets?.splice(index, 1);
+                    }
+                })
+            }
+            styleSheets.delete(this);
         }
 
         set(key:string, value:CSSObject){
@@ -149,6 +160,7 @@ export namespace OxidizerCSS {
 
         adopt(node?:Document|ShadowRoot){
             node = node ?? document;
+            this.adoptedParent = node;
             if (this.cssStyleSheet)
                 node.adoptedStyleSheets.push(this.cssStyleSheet);
             return this;

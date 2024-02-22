@@ -1,21 +1,20 @@
 {
-  "name": "oxidizer-ts",
-  "version": "1.0.0",
-  "description": "A lightweight reactive web development framework based on web components",
+  "name": "oxidizer",
+  "version": "2.0.0",
+  "description": "A lightweight reactive web development library based on web components.",
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "..."
+    "url": "https://github.com/michaelmunson/oxidizer-ts"
   },
   "keywords": [
-    "web",
-    "framework",
+    "WebDevelopment",
+    "library",
     "reactive",
-    "web",
-    "components"
+    "WebComponents"
   ],
   "author": "Michael Munson",
   "license": "ISC",

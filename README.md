@@ -1,13 +1,13 @@
 # Oxidizer 
-Typescript version of the Oxidizer Framework
+A lightweight reactive web development library based on web components.
 
 ## Installation
 ```bash
-npm install oxidizer-ts
+npm install oxidizer
 ```
 ## Getting Started
 ```typescript
-import {DIV, H1, HR, P} from "oxidizer-ts"
+import {DIV, H1, HR, P} from "oxidizer"
 
 const root = document.body;
 
@@ -27,7 +27,7 @@ root.append(
 ```
 ## Props & State
 ```typescript
-import { DIV, H1, P } from "oxidizer-ts";
+import { DIV, H1, P } from "oxidizer";
 
 interface Person {
     first:string
@@ -57,7 +57,7 @@ console.log(info.querySelector('p').innerText) // Output: "First Name: Jane"
 
 *simple counter app*
 ```typescript
-import Oxidizer, { BUTTON, DIV, P } from "oxidizer-ts";
+import Oxidizer, { BUTTON, DIV, P } from "oxidizer";
 
 const ButtonGroup = (children:Oxidizer.HTML[]) => {
   return (
@@ -95,7 +95,7 @@ We can leverage the `Oxidizer.createElement` method and `Oxidizer.Component` cla
 
 *counterApp.ts*
 ```typescript
-import Oxidizer, {H1, P, BUTTON} from "oxidizer-ts";
+import Oxidizer, {H1, P, BUTTON} from "oxidizer";
 
 interface CounterAppProps {
   count: number
@@ -135,7 +135,7 @@ document.body.append(app);
 We can pass children to a component using the `Children` field.
 *simpleArticle.ts*
 ```typescript
-import Oxidizer, {H1} from "oxidizer-ts";
+import Oxidizer, {H1} from "oxidizer";
 
 export const SimpleArticle = Oxidizer.createElement(
   'simple-article',
@@ -151,7 +151,7 @@ export const SimpleArticle = Oxidizer.createElement(
 ```
 *app.ts*
 ```typescript
-import {P} from "oxidizer-ts";
+import {P} from "oxidizer";
 import {SimpleArticle} from "simpleArticle"; 
 
 const simpleArticle = SimpleArticle([
@@ -165,9 +165,40 @@ console.log(
 ) // [HTMLElement]
 ```
 
+## Shadow Component
+```typescript
+import Oxidizer, { P } from "../oxidizer";
+
+const MyShadow = Oxidizer.createShadowElement(
+  'my-shadow',
+  class extends Oxidizer.ShadowComponent<{ name: string, color:string }> {
+    css = () => {
+      return {
+        'p' : {
+          color: this.props.color
+        }
+      }
+    }
+
+    render() {
+      return [
+        () => P(this.props.name)
+      ]
+    }
+  },
+  {mode: 'open'}
+)
+
+const shadowComponent = MyShadow({
+  props: { name: "Michael", color:'red' }
+});
+
+document.body.appendChild(shadowComponent);
+```
+
 ## CSS
 ```typescript
-import Oxidizer from "oxidizer-ts";
+import Oxidizer from "oxidizer";
 
 const stylesheet = new Oxidizer.StyleSheet({
   'body' : {
@@ -184,9 +215,9 @@ const stylesheet = new Oxidizer.StyleSheet({
 stylesheet.adopt();
 ```
 
-## Examples
+## More Examples
 ```typescript
-import {DIV, P, B} from 'oxidizer-ts'
+import {DIV, P, B} from 'oxidizer'
 
 const app = (
   DIV({props:{loading:true}}, (props) => {

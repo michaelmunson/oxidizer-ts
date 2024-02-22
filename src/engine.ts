@@ -1,4 +1,5 @@
 import { Intrinsics } from "./intrinsics";
+import { OxidizerCSS } from "./utils/css";
 
 type DOMElement = Intrinsics.Intrinsic | Node;
 
@@ -6,6 +7,9 @@ export type RenderFunction<T extends DOMElement=DOMElement, Props={[key:string]:
     = (props:Props) => T|T[];
 
 function insertElement(element:DOMElement, nextChild:DOMElement|null, rendered:DOMElement|DOMElement[]){
+    element = (element as any)?.shadowRoot 
+            ?? (element as any)?.__oxsr__
+            ?? element;
     if (nextChild) {
         if (Array.isArray(rendered)){
             rendered.forEach(el => element.insertBefore(el, nextChild));
@@ -64,6 +68,11 @@ class RenderMap extends Map<DOMElement, ChildRenderMap> {
                 toSet.set(rendered, fn);
             }
             this.set(element, toSet);
+            if ('css' in element){
+                if ('__oxssrfn__' in element){
+                    element.css = element.__oxssrfn__;
+                }
+            }
         }
     }
 }
