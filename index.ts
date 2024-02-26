@@ -112,8 +112,8 @@ export const {
 namespace Oxidizer {
     export type Intrinsic<T extends HTMLElement=HTMLElement, Props=undefined> = Intrinsics.Intrinsic<T,Props>;
     export type HTML<Props=undefined> = Intrinsic<HTMLElement,Props>
-    export import Component = OxidizerComponent;
-    export import ShadowComponent = OxidizerShadowComponent;
+    export const Component = OxidizerComponent;
+    export const ShadowComponent = OxidizerShadowComponent;
     export import StyleSheet = OxidizerCSS.StyleSheet;
     export const createElement = OxidizerCreateElement;
     export const createShadowElement = OxidizerCreateShadowElement;

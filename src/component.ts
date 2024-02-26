@@ -40,4 +40,4 @@ export function createElement<Props>(tagName:string, elementClass:typeof Compone
     }
 }
 
-export module Component {}
+// export module Component {}

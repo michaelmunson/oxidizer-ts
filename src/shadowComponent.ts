@@ -86,4 +86,4 @@ export function createShadowElement<Props>(tagName:string, elementClass:typeof S
     }
 }
 
-export module ShadowComponent {}
+// export module ShadowComponent {}
