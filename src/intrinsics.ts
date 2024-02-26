@@ -684,7 +684,7 @@ export namespace Intrinsics {
             fields?:Fields<HTMLElement, Props>|Children<Props>, 
             children?:Children<Props>
         ) : Intrinsic<HTMLElement, Props> {
-            return create<HTMLElement,Props>('search', fields, children);
+            return create<HTMLElement,Props>('search' as any, fields, children);
         },
         SECTION<Props=undefined>(
             fields?:Fields<HTMLElement, Props>|Children<Props>, 
