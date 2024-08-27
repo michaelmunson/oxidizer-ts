@@ -1,7 +1,7 @@
-import { Component as OxidizerComponent, createElement as OxidizerCreateElement } from "./src/component";
-import { ShadowComponent as OxidizerShadowComponent, createShadowElement as OxidizerCreateShadowElement} from "./src/shadowComponent"
-import { Intrinsics } from "./src/intrinsics";
-import { OxidizerCSS } from "./src/utils/css";
+import { Component as OxidizerComponent, createElement as OxidizerCreateElement } from "./component";
+import { ShadowComponent as OxidizerShadowComponent, createShadowElement as OxidizerCreateShadowElement} from "./shadowComponent"
+import { Intrinsics } from "./intrinsics";
+import { OxidizerCSS } from "./utils/css";
 
 export const {
     A,

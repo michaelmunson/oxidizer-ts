@@ -1,24 +1,13 @@
 {
     "compilerOptions": {
-        "target": "es2022",
-        "strict": true,
-        "preserveConstEnums": true,
-        "sourceMap": false,
-        "module": "ESNext",
-        "moduleResolution": "Node",
+        "target": "ES2022",
+        "module": "CommonJS",
+        "declaration": true,
         "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "noEmit": true,
-        "allowImportingTsExtensions": true,
-        "resolveJsonModule": true,
-        "noImplicitAny": true,
-        "outDir": "./build"
+        "outDir": "./dist",
+        "strict": true,
+        "downlevelIteration": true
     },
-    "ts-node": {
-        "esm": true
-    },
-    "exclude": [
-        "node_modules"
-    ]
+    "include": ["src"],
+    "exclude": ["node_modules", ".builder"]
 }
