@@ -4,7 +4,8 @@
   "description": "A lightweight reactive web development library based on web components.",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "build": "rm -rf dist && tsc",
+    "create-docs" : "typedoc --out ./docs ./src/index.ts"
   },
   "repository": {
     "type": "git",
