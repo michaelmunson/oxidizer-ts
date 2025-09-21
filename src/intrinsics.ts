@@ -489,6 +489,12 @@ export namespace Intrinsics {
         ) : Intrinsic<HTMLLinkElement, Props> {
             return create<HTMLLinkElement,Props>('link', fields, children);
         },
+        MAIN<Props=undefined>(
+            fields?:Fields<HTMLElement, Props>|Children<Props>, 
+            children?:Children<Props>
+        ) : Intrinsic<HTMLElement, Props> {
+            return create<HTMLElement,Props>('main', fields, children);
+        },
         MAP<Props=undefined>(
             fields?:Fields<HTMLMapElement, Props>|Children<Props>, 
             children?:Children<Props>

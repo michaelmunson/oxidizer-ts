@@ -50,6 +50,7 @@ export const elements = {
     "LABEL": "HTMLLabelElement",
     "LEGEND": "HTMLLegendElement",
     "LINK": "HTMLLinkElement",
+    "MAIN": "HTMLElement",
     "MAP": "HTMLMapElement",
     "MENU": "HTMLMenuElement",
     "MARK": "HTMLElement",
